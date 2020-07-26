@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://steve_spriteframes.tres" type="SpriteFrames" id=1]
+[ext_resource path="res://steve.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 25.4227, 32.7754 )
+
+[node name="steve" type="KinematicBody2D"]
+position = Vector2( 0, 2.61276 )
+script = ExtResource( 2 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, 1.3064 )
+scale = Vector2( 1, 0.972783 )
+frames = ExtResource( 1 )
+animation = "idle"
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 15.6767 )
+shape = SubResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

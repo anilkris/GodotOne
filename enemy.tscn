@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Assets/enemies/slimeBlue_squashed.png" type="Texture" id=1]
+[ext_resource path="res://Assets/enemies/slimeBlue.png" type="Texture" id=2]
+[ext_resource path="res://Assets/enemies/slimeBlue_blue.png" type="Texture" id=3]
+[ext_resource path="res://enemy.gd" type="Script" id=4]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "crawl",
+"speed": 3.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "squash",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 32, 16.5376 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 18.9211, 4.65452 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 43.6819, 13.6528 )
+
+[node name="Enemy" type="KinematicBody2D"]
+collision_layer = 16
+collision_mask = 2147483699
+script = ExtResource( 4 )
+
+[node name="EnemySprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0.475317, 0.712974 )
+scale = Vector2( 1.68421, 1.53285 )
+frames = SubResource( 1 )
+animation = "crawl"
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.643639, 10.3776 )
+shape = SubResource( 2 )
+one_way_collision_margin = 20.0
+
+[node name="floor_checker" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, 50 )
+collision_mask = 2
+
+[node name="topchecker" type="Area2D" parent="."]
+collision_layer = 2147483664
+collision_mask = 2147483681
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="topchecker"]
+position = Vector2( -0.138664, -11.9624 )
+shape = SubResource( 3 )
+
+[node name="sidechecker" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 2147483681
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="sidechecker"]
+position = Vector2( 1.93712, 9.68568 )
+shape = SubResource( 4 )
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+[connection signal="gotcha_steve" from="." to="." method="_on_Enemy_gotcha_steve"]
+[connection signal="body_entered" from="topchecker" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_entered" from="sidechecker" to="." method="_on_sidechecker_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
